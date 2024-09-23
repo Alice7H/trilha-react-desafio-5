@@ -1,11 +1,11 @@
 import Link from 'next/link';
+import { getGlobalData } from '../utils/global-data';
 import { getPosts } from '../utils/mdx-utils';
-
+import { localeDateFormat } from '../utils/dateFormatter';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Layout, { GradientBackground } from '../components/Layout';
 import ArrowIcon from '../components/ArrowIcon';
-import { getGlobalData } from '../utils/global-data';
 import SEO from '../components/SEO';
 
 export default function Index({ posts, globalData }) {
@@ -28,14 +28,14 @@ export default function Index({ posts, globalData }) {
                 href={`/posts/${post.id}`}
               >
                 <a className="py-6 lg:py-10 px-6 lg:px-16 block focus:outline-none focus:ring-4">
-                  {post.created_ate && (
+                  {post.created_at && (
                     <p className="uppercase mb-3 font-bold opacity-60">
-                      {post.created_at}
+                      {localeDateFormat(post.created_at)}
                     </p>
                   )}
                   <h2 className="text-2xl md:text-3xl">{post.title}</h2>
                   {post.description && (
-                    <p className="mt-3 text-lg opacity-60">
+                    <p className="mt-3 text-lg opacity-60 truncate text-ellipsis hover:text-clip">
                       {post.description}
                     </p>
                   )}
@@ -62,7 +62,6 @@ export default function Index({ posts, globalData }) {
 export async function getServerSideProps() {
   const posts = await getPosts();
   const globalData = getGlobalData()
-
 
   return { props: { posts, globalData } };
 }
